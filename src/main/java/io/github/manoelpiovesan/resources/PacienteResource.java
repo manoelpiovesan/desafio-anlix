@@ -9,11 +9,43 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Path("/pacientes")
 public class PacienteResource {
+
+    @GET
+    @Path("/indices")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getInfoByDate(
+            @QueryParam("date") String dateString
+    ) {
+        LocalDate date = LocalDate.parse(dateString);
+
+        Long startOfDay = date.atStartOfDay().toEpochSecond(ZoneOffset.UTC);
+        Long endOfDay = date.atTime(23, 59, 59).toEpochSecond(ZoneOffset.UTC);
+
+        List<IndicePulmonar> indicesPulmonares = IndicePulmonar.find("data >= ?1 and data <= ?2",
+                Sort.ascending("data"),
+                startOfDay,
+                endOfDay).list();
+
+        List<IndiceCardiaco> indicesCardiacos = IndiceCardiaco.find("data >= ?1 and data <= ?2",
+                Sort.ascending("data"),
+                startOfDay,
+                endOfDay).list();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("indices_pulmonares", indicesPulmonares);
+        map.put("indices_cardiacos", indicesCardiacos);
+
+        return Response.ok(map).build();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -22,9 +54,7 @@ public class PacienteResource {
             @QueryParam("size") @DefaultValue("10") int size,
             @QueryParam("t") String term
     ) {
-        return Response.ok(
-                               search(term, Sort.ascending("nome")).page(page, size).list())
-                       .build();
+        return Response.ok(search(term, Sort.ascending("nome")).page(page, size).list()).build();
     }
 
     @GET
@@ -61,16 +91,16 @@ public class PacienteResource {
         }
 
         IndiceCardiaco indiceCardiaco = IndiceCardiaco.find("paciente",
-                                                            Sort.descending(
-                                                                    "data"),
-                                                            paciente)
-                                                      .firstResult();
+                        Sort.descending(
+                                "data"),
+                        paciente)
+                .firstResult();
 
         IndicePulmonar indicePulmonar = IndicePulmonar.find("paciente",
-                                                            Sort.descending(
-                                                                    "data"),
-                                                            paciente)
-                                                      .firstResult();
+                        Sort.descending(
+                                "data"),
+                        paciente)
+                .firstResult();
         Map<String, Object> map = new HashMap<>();
         map.put("indice_cardiaco", indiceCardiaco);
         map.put("indice_pulmonar", indicePulmonar);
@@ -84,8 +114,8 @@ public class PacienteResource {
         }
 
         return Paciente.find("LOWER(nome) LIKE concat('%', ?1, '%')",
-                             Sort.by("nome"),
-                             term);
+                Sort.by("nome"),
+                term);
     }
 
 }
