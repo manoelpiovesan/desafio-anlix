@@ -1,8 +1,8 @@
 package io.github.manoelpiovesan.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "paciente")
@@ -77,6 +77,12 @@ public class Paciente extends AbstractEntity {
     @Column(name = "cor")
     public String cor;
 
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL,
+               orphanRemoval = true, fetch = FetchType.LAZY)
+    public List<IndicePulmonar> indicesPulmonares;
 
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL,
+               orphanRemoval = true, fetch = FetchType.LAZY)
+    public List<IndiceCardiaco> indicesCardiacos;
 
 }

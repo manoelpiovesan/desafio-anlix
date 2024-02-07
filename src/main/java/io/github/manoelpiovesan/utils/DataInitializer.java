@@ -2,12 +2,15 @@ package io.github.manoelpiovesan.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.manoelpiovesan.entities.IndicePulmonar;
 import io.github.manoelpiovesan.entities.Paciente;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,7 @@ public class DataInitializer {
     @Startup
     public void init() throws IOException {
         initPatientsData();
+        initIndicePulmonarData();
     }
 
     @Transactional
@@ -67,9 +71,56 @@ public class DataInitializer {
         }
     }
 
+    @Transactional
+    public void initIndicePulmonarData() throws IOException {
+        if (IndicePulmonar.count() != 0) {
+            System.out.println("Índices pulmonares já inicializados");
+            return;
+        }
+
+        File indicesPulmonaresFolder =
+                new File(getFilePath("dados/indice_pulmonar"));
+
+        List<File> files = List.of(Objects.requireNonNull(
+                indicesPulmonaresFolder.listFiles()));
+
+        for (File file : files) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                boolean firstLine = true;
+                while ((line = br.readLine()) != null) {
+                    if (firstLine) {
+                        firstLine = false;
+                        continue;
+                    }
+
+                    String[] data = line.split(" ");
+
+                    Paciente paciente =
+                            Paciente.find("cpf", data[0]).firstResult();
+
+                    if (paciente != null) {
+                        IndicePulmonar indicePulmonar = new IndicePulmonar();
+                        indicePulmonar.paciente = paciente;
+                        indicePulmonar.cpf = data[0];
+                        indicePulmonar.data = data[1];
+                        indicePulmonar.indice = Double.parseDouble(data[2]);
+
+                        indicePulmonar.persist();
+                        System.out.println(indicePulmonar);
+                    }
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private String getFilePath(String fileName) {
         return Objects.requireNonNull(
-                getClass().getClassLoader().getResource(fileName)).getFile();
+                              getClass().getClassLoader().getResource(fileName))
+                      .getFile();
     }
 
 }
