@@ -2,7 +2,6 @@
 
 ### ⏱️ TODO (Backend)
 
-com os valores mais recentes de cada uma;
 
 - [ ] Consultar para uma determinada data (dia, mês e ano), todas as
   características existentes de todos os pacientes da base de dados;
@@ -13,7 +12,7 @@ com os valores mais recentes de cada uma;
 
 ### ✅ DONE (Backend)
 
-- [x] Consultar em uma única chamada, todas as características de um paciente,
+- [x] Consultar em uma única chamada, todas as características de um paciente, com os valores mais recentes de cada uma;
 ```bash
 $ curl localhost:8080/pacientes/{id}/indices
 ```
