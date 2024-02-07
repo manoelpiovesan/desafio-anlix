@@ -1,15 +1,24 @@
 # Desafio - Anlix
 
-### ⏱️ TODO (Backend)
+### ⏱️ TODO 
 
 
 
-- [ ] Consultar uma característica qualquer de um paciente para um intervalo de
-  datas a ser especificado na chamada da API;
+
 - [ ] Consultar o valor mais recente de uma característica de um paciente que
   esteja entre um intervalo de valores a ser especificado na chamada da API;
 
-### ✅ DONE (Backend)
+### ✅ DONE 
+- [x] Consultar uma característica qualquer de um paciente para um intervalo de
+  datas a ser especificado na chamada da API;
+```bash
+$ curl localhost:8080/pacientes/{id}/pulmonar?start=yyyy-MM-dd&end=yyyy-MM-dd
+```
+```bash
+$ curl localhost:8080/pacientes/{id}/cardiaco?start=yyyy-MM-dd&end=yyyy-MM-dd
+```
+<br>
+
 - [x] Consultar para uma determinada data (dia, mês e ano), todas as com os valores mais recentes de cada uma;
 ```bash
 $ curl localhost:8080/pacientes/indices?date=yyyy-MM-dd
