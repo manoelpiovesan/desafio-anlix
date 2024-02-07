@@ -61,7 +61,9 @@ public class PacienteResourceTest {
     @Order(2)
     public void listAll() {
         given()
-                .when().get("/pacientes")
+                .when()
+                .queryParam("size", 100)
+                .get("/pacientes")
                 .then()
                 .statusCode(200)
                 .body("$.size()", is(count));

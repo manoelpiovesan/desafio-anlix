@@ -1,6 +1,8 @@
 package io.github.manoelpiovesan.resources;
 
 import io.github.manoelpiovesan.entities.Paciente;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Sort;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -12,9 +14,12 @@ public class PacienteResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(
             @QueryParam("page") @DefaultValue("0") int page,
-            @QueryParam("size") @DefaultValue("10") int size
+            @QueryParam("size") @DefaultValue("10") int size,
+            @QueryParam("term") String term
     ) {
-        return Response.ok(Paciente.findAll().page(page, size).list()).build();
+        return Response.ok(
+                               search(term.toLowerCase(), Sort.ascending("nome")).page(page, size).list())
+                       .build();
     }
 
     @GET
@@ -37,6 +42,16 @@ public class PacienteResource {
         }
 
         return Response.ok(paciente).build();
+    }
+
+    private PanacheQuery<Paciente> search(String term, Sort sort) {
+        if (term == null) {
+            return Paciente.findAll(sort);
+        }
+
+        return Paciente.find("LOWER(nome) LIKE concat('%', ?1, '%')",
+                             Sort.by("nome"),
+                             term);
     }
 
 }
