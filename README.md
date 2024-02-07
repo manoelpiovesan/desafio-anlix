@@ -14,18 +14,24 @@ com os valores mais recentes de cada uma;
 ### ✅ DONE (Backend)
 
 - [x] Consultar em uma única chamada, todas as características de um paciente,
-
-> /pacientes/{id}/indices
+```bash
+$ curl localhost:8080/pacientes/{id}/indices
+```
 
 - [x] Consultar, para cada paciente, cada uma das características
   individualmente e cada uma delas sendo a mais recente disponível;
 
-> /pacientes/{id}/pulmonar
->
-> /pacientes/{id}/cardiaco
+```bash
+$ curl localhost:8080/pacientes/{id}/pulmonar
+```
+```bash
+$ curl localhost:8080/pacientes/{id}/cardiaco
+```
 
 - [x] Consultar pacientes que contenham um nome ou parte de um nome a ser
   especificado na chamada da API.
 
-> /pacientes?t=termoDePesquisa
+```bash
+$ curl localhost:8080/pacientes?t=termoDePesquisa
+```
 
