@@ -15,7 +15,7 @@ public class PacienteResource {
     public Response list(
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("10") int size,
-            @QueryParam("term") String term
+            @QueryParam("t") String term
     ) {
         return Response.ok(
                                search(term.toLowerCase(), Sort.ascending("nome")).page(page, size).list())
