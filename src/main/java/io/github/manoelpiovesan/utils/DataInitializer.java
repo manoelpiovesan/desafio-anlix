@@ -36,6 +36,7 @@ public class DataInitializer {
 
         for (Map<String, Object> patient : patientList) {
             Paciente paciente = new Paciente();
+
             paciente.nome = (String) patient.get("nome");
             paciente.idade = (Integer) patient.get("idade");
             paciente.cpf = (String) patient.get("cpf");

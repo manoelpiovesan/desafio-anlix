@@ -1,10 +1,7 @@
 package io.github.manoelpiovesan.resources;
 
 import io.github.manoelpiovesan.entities.Paciente;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -13,8 +10,11 @@ public class PacienteResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list() {
-        return Response.ok(Paciente.listAll()).build();
+    public Response list(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("10") int size
+    ) {
+        return Response.ok(Paciente.findAll().page(page, size).list()).build();
     }
 
     @GET
