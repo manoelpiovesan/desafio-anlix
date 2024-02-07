@@ -2,6 +2,7 @@ package io.github.manoelpiovesan.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.manoelpiovesan.entities.IndiceCardiaco;
 import io.github.manoelpiovesan.entities.IndicePulmonar;
 import io.github.manoelpiovesan.entities.Paciente;
 import io.quarkus.runtime.Startup;
@@ -23,6 +24,7 @@ public class DataInitializer {
     public void init() throws IOException {
         initPatientsData();
         initIndicePulmonarData();
+        initIndiceCardiacoData();
     }
 
     @Transactional
@@ -66,17 +68,25 @@ public class DataInitializer {
             paciente.cor = (String) patient.get("cor");
 
             paciente.persist();
-            System.out.println(
-                    "Paciente " + paciente.nome + " persistido com sucesso!");
+
         }
+
+        if (Paciente.count() == 0) {
+            System.out.println("Erro ao persistir pacientes");
+            return;
+        }
+
+        System.out.println("Pacientes persistidos com sucesso!");
     }
 
     @Transactional
     public void initIndicePulmonarData() throws IOException {
         if (IndicePulmonar.count() != 0) {
-            System.out.println("Índices pulmonares já inicializados");
+            System.out.println("Indices pulmonares ja inicializados");
             return;
         }
+
+        System.out.println("Iniciando persistencia de indices pulmonares...");
 
         File indicesPulmonaresFolder =
                 new File(getFilePath("dados/indice_pulmonar"));
@@ -88,6 +98,7 @@ public class DataInitializer {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line;
                 boolean firstLine = true;
+
                 while ((line = br.readLine()) != null) {
                     if (firstLine) {
                         firstLine = false;
@@ -107,14 +118,71 @@ public class DataInitializer {
                         indicePulmonar.indice = Double.parseDouble(data[2]);
 
                         indicePulmonar.persist();
-                        System.out.println(indicePulmonar);
                     }
 
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
+
+        if (IndicePulmonar.count() == 0) {
+            System.out.println("Erro ao persistir indices pulmonares");
+            return;
+        }
+
+        System.out.println("Indices pulmonares persistidos com sucesso!");
+    }
+
+    @Transactional
+    public void initIndiceCardiacoData() throws IOException {
+        if (IndiceCardiaco.count() != 0) {
+            System.out.println("Indices cardiacos ja inicializados");
+            return;
+        }
+
+        System.out.println("Iniciando persistencia de indices cardiacos...");
+
+        File indicesCardiacosFolder =
+                new File(getFilePath("dados/indice_cardiaco"));
+
+        List<File> files = List.of(Objects.requireNonNull(
+                indicesCardiacosFolder.listFiles()));
+
+        for (File file : files) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                boolean firstLine = true;
+
+                while ((line = br.readLine()) != null) {
+                    if (firstLine) {
+                        firstLine = false;
+                        continue;
+                    }
+
+                    String[] data = line.split(" ");
+
+                    Paciente paciente =
+                            Paciente.find("cpf", data[0]).firstResult();
+
+                    if (paciente != null) {
+                        IndiceCardiaco indiceCardiaco = new IndiceCardiaco();
+                        indiceCardiaco.paciente = paciente;
+                        indiceCardiaco.cpf = data[0];
+                        indiceCardiaco.data = data[1];
+                        indiceCardiaco.indice = Double.parseDouble(data[2]);
+
+                        indiceCardiaco.persist();
+                    }
+
+                }
+            }
+        }
+
+        if (IndiceCardiaco.count() == 0) {
+            System.out.println("Erro ao persistir índices cardiacos");
+            return;
+        }
+
+        System.out.println("Índices cardiacos persistidos com sucesso!");
     }
 
     private String getFilePath(String fileName) {
