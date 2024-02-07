@@ -18,7 +18,7 @@ public class PacienteResource {
             @QueryParam("t") String term
     ) {
         return Response.ok(
-                               search(term.toLowerCase(), Sort.ascending("nome")).page(page, size).list())
+                               search(term, Sort.ascending("nome")).page(page, size).list())
                        .build();
     }
 

@@ -19,6 +19,8 @@ public class PacienteResourceTest {
     private static final Map<String, Object> patientMap = new HashMap<>();
     private static final Long patientId = 1L;
 
+    private static final Integer wrongId = 0;
+
     @BeforeAll
     public static void setup() {
         // From json - First patient
@@ -71,6 +73,42 @@ public class PacienteResourceTest {
 
     @Test
     @Order(3)
+    public void testSearchPatientByTerm() {
+        given()
+                .when()
+                .queryParam("t", "alexandre")
+                .get("/pacientes")
+                .then()
+                .statusCode(200)
+                .body("$.size()", is(1));
+    }
+
+    @Test
+    @Order(4)
+    public void testSearchPatientByWrongTerm() {
+        given()
+                .when()
+                .queryParam("t", "wrongterm")
+                .get("/pacientes")
+                .then()
+                .statusCode(200)
+                .body("$.size()", is(0));
+    }
+
+    @Test
+    @Order(5)
+    public void testGetPatientByWrongId() {
+        given()
+                .when()
+                .contentType("application/json")
+                .pathParam("id", 0)
+                .get("/pacientes/{id}")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    @Order(6)
     public void testGetPatientById() {
         given()
                 .when()
