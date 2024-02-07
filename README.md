@@ -22,5 +22,5 @@
 
 - [x] Consultar pacientes que contenham um nome ou parte de um nome a ser
   especificado na chamada da API.
-> /pacientes?t=<termoDePesquisa>
+> /pacientes?t=termoDePesquisa
 
