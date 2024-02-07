@@ -53,6 +53,12 @@ public class DataInitializer {
             paciente.bairro = (String) patient.get("bairro");
             paciente.cidade = (String) patient.get("cidade");
             paciente.estado = (String) patient.get("estado");
+            paciente.telefone_fixo = (String) patient.get("telefone_fixo");
+            paciente.celular = (String) patient.get("celular");
+            paciente.altura = (String) patient.get("altura");
+            paciente.peso = (Integer) patient.get("peso");
+            paciente.tipo_sanguineo = (String) patient.get("tipo_sanguineo");
+            paciente.cor = (String) patient.get("cor");
 
             paciente.persist();
             System.out.println(
