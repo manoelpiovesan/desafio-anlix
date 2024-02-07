@@ -1,11 +1,16 @@
 package io.github.manoelpiovesan.resources;
 
+import io.github.manoelpiovesan.entities.IndiceCardiaco;
+import io.github.manoelpiovesan.entities.IndicePulmonar;
 import io.github.manoelpiovesan.entities.Paciente;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Sort;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/pacientes")
 public class PacienteResource {
@@ -44,7 +49,34 @@ public class PacienteResource {
         return Response.ok(paciente).build();
     }
 
+    @GET
+    @Path("/{id}/indices")
+    public Response getIndicesByPatientId(
+            @PathParam("id")
+            Long id) {
+        Paciente paciente = Paciente.findById(id);
 
+        if (paciente == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        IndiceCardiaco indiceCardiaco = IndiceCardiaco.find("paciente",
+                                                            Sort.descending(
+                                                                    "data"),
+                                                            paciente)
+                                                      .firstResult();
+
+        IndicePulmonar indicePulmonar = IndicePulmonar.find("paciente",
+                                                            Sort.descending(
+                                                                    "data"),
+                                                            paciente)
+                                                      .firstResult();
+        Map<String, Object> map = new HashMap<>();
+        map.put("indice_cardiaco", indiceCardiaco);
+        map.put("indice_pulmonar", indicePulmonar);
+
+        return Response.ok(map).build();
+    }
 
     private PanacheQuery<Paciente> search(String term, Sort sort) {
         if (term == null) {
