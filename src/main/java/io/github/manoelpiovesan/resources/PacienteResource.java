@@ -44,6 +44,8 @@ public class PacienteResource {
         return Response.ok(paciente).build();
     }
 
+
+
     private PanacheQuery<Paciente> search(String term, Sort sort) {
         if (term == null) {
             return Paciente.findAll(sort);
