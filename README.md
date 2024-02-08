@@ -2,12 +2,16 @@
 
 ### ⏱️ TODO 
 
+---
 
+- [ ] Implementar testes;
 
 
 
 
 ### ✅ DONE 
+
+---
 
 - [x] Consultar o valor mais recente de uma característica de um paciente que
   esteja entre um intervalo de valores a ser especificado na chamada da API;
