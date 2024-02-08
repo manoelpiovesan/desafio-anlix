@@ -5,10 +5,19 @@
 
 
 
-- [ ] Consultar o valor mais recente de uma característica de um paciente que
-  esteja entre um intervalo de valores a ser especificado na chamada da API;
+
 
 ### ✅ DONE 
+
+- [x] Consultar o valor mais recente de uma característica de um paciente que
+  esteja entre um intervalo de valores a ser especificado na chamada da API;
+```bash
+$ curl localhost:8080/pacientes/{id}/pulmonar?min=valorMinimo&max=valorMaximo 
+```
+```bash
+$ curl localhost:8080/pacientes/{id}/cardiaco?min=valorMinimo&max=valorMaximo
+```
+
 - [x] Consultar uma característica qualquer de um paciente para um intervalo de
   datas a ser especificado na chamada da API;
 ```bash

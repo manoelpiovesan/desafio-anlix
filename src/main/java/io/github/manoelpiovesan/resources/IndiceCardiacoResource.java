@@ -8,8 +8,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Path("/pacientes")
 public class IndiceCardiacoResource {
@@ -21,7 +21,9 @@ public class IndiceCardiacoResource {
             @PathParam("id")
             Long id,
             @QueryParam("start") String startDateString,
-            @QueryParam("end") String endDateString
+            @QueryParam("end") String endDateString,
+            @QueryParam("min") String min,
+            @QueryParam("max") String max
     ) {
 
         Paciente paciente = Paciente.findById(id);
@@ -30,15 +32,42 @@ public class IndiceCardiacoResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        if (startDateString != null && endDateString != null) {
-            Long startTime = LocalDate.parse(startDateString).atStartOfDay().toEpochSecond(ZoneOffset.UTC);
-            Long endTime = LocalDate.parse(endDateString).atTime(23, 59, 59).toEpochSecond(ZoneOffset.UTC);
+        // Search by min and max
+        if (min != null && max != null) {
+            IndiceCardiaco indice = IndiceCardiaco.find(
+                    "paciente = ?1 and indice >= ?2 and indice <= ?3",
+                    Sort.descending("data"),
+                    paciente,
+                    Double.parseDouble(min),
+                    Double.parseDouble(max)).firstResult();
 
-            return Response.ok(IndiceCardiaco.find("paciente = ?1 and data >= ?2 and data <= ?3",
+            if (indice == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                return Response.ok(indice).build();
+            }
+        }
+
+        // Search by date range
+        if (startDateString != null && endDateString != null) {
+            Long startTime = LocalDate.parse(startDateString)
+                                      .atStartOfDay()
+                                      .toEpochSecond(ZoneOffset.UTC);
+            Long endTime = LocalDate.parse(endDateString)
+                                    .atTime(23, 59, 59)
+                                    .toEpochSecond(ZoneOffset.UTC);
+
+            List<IndiceCardiaco> mapList = IndiceCardiaco.find(
+                    "paciente = ?1 and data >= ?2 and data <= ?3",
                     Sort.ascending("data"),
                     paciente,
                     startTime,
-                    endTime).list()).build();
+                    endTime).list();
+            if (mapList.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                return Response.ok(mapList).build();
+            }
         }
 
         IndiceCardiaco indiceCardiaco = IndiceCardiaco.find("paciente",

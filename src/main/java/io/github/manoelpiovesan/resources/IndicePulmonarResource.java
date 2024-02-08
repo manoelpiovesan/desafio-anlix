@@ -21,7 +21,10 @@ public class IndicePulmonarResource {
             @PathParam("id")
             Long id,
             @QueryParam("start") String startDateString,
-            @QueryParam("end") String endDateString) {
+            @QueryParam("end") String endDateString,
+            @QueryParam("min") String min,
+            @QueryParam("max")
+            String max) {
 
         Paciente paciente = Paciente.findById(id);
 
@@ -29,11 +32,32 @@ public class IndicePulmonarResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        if (startDateString != null && endDateString != null) {
-            Long startTime = LocalDate.parse(startDateString).atStartOfDay().toEpochSecond(ZoneOffset.UTC);
-            Long endTime = LocalDate.parse(endDateString).atTime(23, 59, 59).toEpochSecond(ZoneOffset.UTC);
+        // Search by min and max
+        if (min != null && max != null) {
+            IndicePulmonar indice = IndicePulmonar.find(
+                    "paciente = ?1 and indice >= ?2 and indice <= ?3",
+                    Sort.descending("data"),
+                    paciente,
+                    Double.parseDouble(min),
+                    Double.parseDouble(max)).firstResult();
 
-            return Response.ok(IndicePulmonar.find("paciente = ?1 and data >= ?2 and data <= ?3",
+            if (indice == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                return Response.ok(indice).build();
+            }
+        }
+
+        if (startDateString != null && endDateString != null) {
+            Long startTime = LocalDate.parse(startDateString)
+                                      .atStartOfDay()
+                                      .toEpochSecond(ZoneOffset.UTC);
+            Long endTime = LocalDate.parse(endDateString)
+                                    .atTime(23, 59, 59)
+                                    .toEpochSecond(ZoneOffset.UTC);
+
+            return Response.ok(IndicePulmonar.find(
+                    "paciente = ?1 and data >= ?2 and data <= ?3",
                     Sort.ascending("data"),
                     paciente,
                     startTime,
@@ -41,10 +65,10 @@ public class IndicePulmonarResource {
         }
 
         IndicePulmonar indicePulmonar = IndicePulmonar.find("paciente",
-                        Sort.descending(
-                                "data"),
-                        paciente)
-                .firstResult();
+                                                            Sort.descending(
+                                                                    "data"),
+                                                            paciente)
+                                                      .firstResult();
 
         if (indicePulmonar == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
