@@ -1,5 +1,6 @@
 package io.github.manoelpiovesan.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -77,10 +78,12 @@ public class Paciente extends AbstractEntity {
     @Column(name = "cor")
     public String cor;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL,
                orphanRemoval = true, fetch = FetchType.LAZY)
     public List<IndicePulmonar> indicesPulmonares;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL,
                orphanRemoval = true, fetch = FetchType.LAZY)
     public List<IndiceCardiaco> indicesCardiacos;

@@ -1,6 +1,5 @@
 package io.github.manoelpiovesan.resources;
 
-import io.github.manoelpiovesan.entities.IndiceCardiaco;
 import io.github.manoelpiovesan.entities.IndicePulmonar;
 import io.github.manoelpiovesan.entities.Paciente;
 import io.quarkus.panache.common.Sort;
@@ -10,6 +9,8 @@ import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/pacientes")
 public class IndicePulmonarResource {
@@ -75,6 +76,58 @@ public class IndicePulmonarResource {
         } else {
             return Response.ok(indicePulmonar).build();
         }
+    }
+
+    @GET
+    @Path("/csv/pulmonar/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getCSVById(
+            @PathParam("id")
+            Long id
+    ) {
+
+        Paciente paciente = Paciente.findById(id);
+        if (paciente == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        StringBuilder csv;
+
+        List<IndicePulmonar> indicesPulmonares = new ArrayList<>();
+
+        indicesPulmonares =
+                IndicePulmonar.find("paciente", paciente).list();
+
+        csv = new StringBuilder("cpf;data;indice_pulmonar\n");
+        for (IndicePulmonar i : indicesPulmonares) {
+            csv.append(i.cpf).append(";")
+               .append(i.data).append(";")
+               .append(i.indice).append("\n");
+        }
+
+        return Response.ok(csv.toString()).build();
+    }
+
+    @GET
+    @Path("/csv/pulmonar")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getCSV() {
+
+        StringBuilder csv;
+
+        List<IndicePulmonar> indicesPulmonares = new ArrayList<>();
+
+        indicesPulmonares =
+                IndicePulmonar.findAll().list();
+
+        csv = new StringBuilder("cpf;data;indice_pulmonar\n");
+        for (IndicePulmonar i : indicesPulmonares) {
+            csv.append(i.cpf).append(";")
+               .append(i.data).append(";")
+               .append(i.indice).append("\n");
+        }
+
+        return Response.ok(csv.toString()).build();
     }
 
 }

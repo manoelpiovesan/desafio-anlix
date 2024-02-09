@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/pacientes")
@@ -81,6 +82,58 @@ public class IndiceCardiacoResource {
         } else {
             return Response.ok(indiceCardiaco).build();
         }
+    }
+
+    @GET
+    @Path("/csv/cardiaco/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getCSVById(
+            @PathParam("id")
+            Long id
+    ) {
+
+        Paciente paciente = Paciente.findById(id);
+        if (paciente == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        StringBuilder csv;
+
+        List<IndiceCardiaco> indicesCardiacos = new ArrayList<>();
+
+        indicesCardiacos =
+                IndiceCardiaco.find("paciente", paciente).list();
+
+        csv = new StringBuilder("cpf;data;indice_cardiaco\n");
+        for (IndiceCardiaco i : indicesCardiacos) {
+            csv.append(i.cpf).append(";")
+               .append(i.data).append(";")
+               .append(i.indice).append("\n");
+        }
+
+        return Response.ok(csv.toString()).build();
+    }
+
+    @GET
+    @Path("/csv/cardiaco")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getCSV() {
+
+        StringBuilder csv;
+
+        List<IndiceCardiaco> indicesCardiacos = new ArrayList<>();
+
+        indicesCardiacos =
+                IndiceCardiaco.findAll().list();
+
+        csv = new StringBuilder("cpf;data;indice_cardiaco\n");
+        for (IndiceCardiaco i : indicesCardiacos) {
+            csv.append(i.cpf).append(";")
+               .append(i.data).append(";")
+               .append(i.indice).append("\n");
+        }
+
+        return Response.ok(csv.toString()).build();
     }
 
 }

@@ -1,4 +1,4 @@
-# Desafio - Anlix
+# Desafio Anlix
 
 ### ⏱️ TODO 
 
@@ -12,6 +12,22 @@
 ### ✅ DONE 
 
 ---
+
+-[x] Endpoint de .csv dos dados
+
+```bash
+$ curl localhost:8080/pacientes/pulmonar/csv
+```
+```bash
+$ curl localhost:8080/pacientes/cardiaco/csv
+```
+```bash
+$ curl localhost:8080/pacientes/pulmonar/csv/{id}
+```
+```bash
+$ curl localhost:8080/pacientes/pulmonar/{id}
+```
+
 
 - [x] Consultar o valor mais recente de uma característica de um paciente que
   esteja entre um intervalo de valores a ser especificado na chamada da API;
