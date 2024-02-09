@@ -1,4 +1,6 @@
+import 'package:desafio_anlix_front_folly_fields/enums/color_enum.dart';
 import 'package:folly_fields/crud/abstract_model.dart';
+import 'package:folly_fields/util/folly_iterable_extension.dart';
 
 ///
 ///
@@ -26,7 +28,7 @@ class PacienteModel extends AbstractModel<int> {
   String altura = '';
   int peso = 0;
   String tipoSanguineo = '';
-  String cor = '';
+  PacienteColor cor = PacienteColor.verde;
 
   ///
   ///
@@ -59,7 +61,7 @@ class PacienteModel extends AbstractModel<int> {
     altura = map['altura'];
     peso = map['peso'];
     tipoSanguineo = map['tipo_sanguineo'];
-    cor = map['cor'];
+    cor = PacienteColor.values.byNameOrNull(map['cor']) ?? PacienteColor.verde;
   }
 
   ///

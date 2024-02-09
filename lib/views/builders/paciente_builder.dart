@@ -32,6 +32,12 @@ class PacienteBuilder extends AbstractBuilder<PacienteModel, int> {
   ///
   @override
   Widget getLeading(BuildContext context, PacienteModel model) {
-    return const Icon(Icons.circle);
+    return Icon(
+      Icons.circle,
+      color: model.cor.color,
+    );
   }
+
+
+
 }
