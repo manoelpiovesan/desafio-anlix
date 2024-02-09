@@ -13,7 +13,7 @@
 
 ---
 
--[x] Endpoint de .csv dos dados
+- [x] Endpoint de .csv dos dados
 
 ```bash
 $ curl localhost:8080/pacientes/pulmonar/csv
