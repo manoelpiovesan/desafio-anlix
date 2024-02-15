@@ -25,7 +25,7 @@ $ curl localhost:8080/pacientes/cardiaco/csv
 $ curl localhost:8080/pacientes/pulmonar/csv/{id}
 ```
 ```bash
-$ curl localhost:8080/pacientes/pulmonar/{id}
+$ curl localhost:8080/pacientes/cardiaco/csv/{id}
 ```
 
 
