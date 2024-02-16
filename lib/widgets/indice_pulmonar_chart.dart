@@ -49,12 +49,10 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
 
           return Card(
               child: Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                const Text('Indice Pulmonar'),
-                const SizedBox(height: 10),
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Sparkline(
                   useCubicSmoothing: true,
                   cubicSmoothingFactor: 0.2,
@@ -64,9 +62,18 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                   data: indices,
                   lineColor: Colors.blue,
                 ),
-                            ],
-                          ),
-              ));
+                const SizedBox(height: 10),
+                const Text('Indice Pulmonar',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Text('Máximo: ${indices.reduce((a, b) => a > b ? a : b)}'),
+                Text('Mínimo: ${indices.reduce((a, b) => a < b ? a : b)}'),
+                Text(
+                    'Média: ${indices.reduce((a, b) => a + b) / indices.length}'),
+                Text('Última medição: ${indices.last}'),
+              ],
+            ),
+          ));
         });
   }
 }

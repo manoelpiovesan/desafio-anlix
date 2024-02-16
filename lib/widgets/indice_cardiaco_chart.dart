@@ -49,12 +49,11 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
 
           return Card(
               child: Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                const Text('Indice Cardíaco'),
-                const SizedBox(height: 10),
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
                 Sparkline(
                   useCubicSmoothing: true,
                   averageLine: true,
@@ -64,9 +63,18 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                   data: indices,
                   lineColor: Colors.red,
                 ),
-                            ],
-                          ),
-              ));
+                const SizedBox(height: 10),
+                const Text('Indice Cardíaco',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Text('Máximo: ${indices.reduce((a, b) => a > b ? a : b)}'),
+                Text('Mínimo: ${indices.reduce((a, b) => a < b ? a : b)}'),
+                Text(
+                    'Média: ${indices.reduce((a, b) => a + b) / indices.length}'),
+                Text('Última medição: ${indices.last}'),
+              ],
+            ),
+          ));
         });
   }
 }
