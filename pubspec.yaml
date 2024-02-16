@@ -15,6 +15,7 @@ dependencies:
       url: git@github.com:anlix-io/agattp.git
       ref: main
 
+  chart_sparkline: ^1.0.15+1
   cupertino_icons: ^1.0.2
 
   flutter:
