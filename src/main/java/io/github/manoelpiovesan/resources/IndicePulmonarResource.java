@@ -21,6 +21,9 @@ public class IndicePulmonarResource {
     public Response getIndicePulmonarByPatientId(
             @PathParam("id")
             Long id,
+            @QueryParam("all")
+            @DefaultValue("false")
+            boolean all,
             @QueryParam("start") String startDateString,
             @QueryParam("end") String endDateString,
             @QueryParam("min") String min,
@@ -31,6 +34,16 @@ public class IndicePulmonarResource {
 
         if (paciente == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if (all) {
+            List<IndicePulmonar> indicesPulmonares = IndicePulmonar.find(
+                    "paciente", Sort.ascending("data"), paciente).list();
+            if (indicesPulmonares.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                return Response.ok(indicesPulmonares).build();
+            }
         }
 
         // Search by min and max

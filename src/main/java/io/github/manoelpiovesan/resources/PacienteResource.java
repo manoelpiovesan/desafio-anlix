@@ -11,7 +11,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,9 +116,35 @@ public class PacienteResource {
         return Response.ok(map).build();
     }
 
+    @GET
+    @Path("/{id}/indices/all")
+    public Response getAllIndicesByPatientId(
+            @PathParam("id")
+            Long id) {
+        Paciente paciente = Paciente.findById(id);
 
+        if (paciente == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
+        List<IndiceCardiaco> indiceCardiaco = IndiceCardiaco.find("paciente",
+                                                                  Sort.descending(
+                                                                          "data"),
+                                                                  paciente)
+                                                            .list();
 
+        List<IndicePulmonar> indicePulmonar = IndicePulmonar.find("paciente",
+                                                                  Sort.descending(
+                                                                          "data"),
+                                                                  paciente)
+                                                            .list();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("indice_cardiaco", indiceCardiaco);
+        map.put("indice_pulmonar", indicePulmonar);
+
+        return Response.ok(map).build();
+    }
 
     private void validateIndice(String indice) {
         if (!indice.equals("cardiaco") && !indice.equals("pulmonar")) {

@@ -19,6 +19,9 @@ public class IndiceCardiacoResource {
     @Path("/{id}/cardiaco")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getIndicePulmonarByPatientId(
+            @QueryParam("all")
+            @DefaultValue("false")
+            boolean all,
             @PathParam("id")
             Long id,
             @QueryParam("start") String startDateString,
@@ -31,6 +34,16 @@ public class IndiceCardiacoResource {
 
         if (paciente == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        if (all) {
+            List<IndiceCardiaco> indicesCardiacos = IndiceCardiaco.find(
+                    "paciente", Sort.ascending("data"), paciente).list();
+            if (indicesCardiacos.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                return Response.ok(indicesCardiacos).build();
+            }
         }
 
         // Search by min and max
