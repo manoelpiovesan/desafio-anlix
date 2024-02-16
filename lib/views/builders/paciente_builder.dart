@@ -1,3 +1,4 @@
+import 'package:desafio_anlix_front_folly_fields/enums/color_enum.dart';
 import 'package:desafio_anlix_front_folly_fields/models/paciente_model.dart';
 import 'package:flutter/material.dart';
 import 'package:folly_fields/crud/abstract_builder.dart';
@@ -31,13 +32,18 @@ class PacienteBuilder extends AbstractBuilder<PacienteModel, int> {
   ///
   ///
   @override
+  Widget getSubtitle(BuildContext context, PacienteModel model) {
+    return Text(model.dataNasc);
+  }
+
+  ///
+  ///
+  ///
+  @override
   Widget getLeading(BuildContext context, PacienteModel model) {
     return Icon(
       Icons.circle,
-      color: model.cor.color,
+      color: PacienteColor.fromString(model.cor).color,
     );
   }
-
-
-
 }

@@ -8,22 +8,27 @@ import 'package:folly_fields/crud/abstract_list.dart';
 ///
 ///
 ///
-class PacienteList extends AbstractList<PacienteModel, PacienteBuilder,
-    PacienteConsumer, int> {
+class PacienteList extends AbstractList<PacienteModel,
+    PacienteBuilder,
+    PacienteConsumer,
+    int> {
   ///
   ///
   ///
   PacienteList({
-    super.key,
-    required super.selection,
-    required super.multipleSelection,
+    required super.selection,required super.multipleSelection, super.key
   }) : super(
-          builder: PacienteBuilder(),
-          consumer: PacienteConsumer(),
-          onUpdate: (BuildContext context, PacienteModel model,
-              PacienteBuilder builder, PacienteConsumer consumer,
-              {required bool edit}) async {
-            return PacienteEdit(model, builder, consumer, edit: edit);
-          },
-        );
+    builder: PacienteBuilder(),
+    consumer: PacienteConsumer(),
+    onUpdate: (BuildContext context, PacienteModel model,
+        PacienteBuilder builder, PacienteConsumer consumer,
+        {required bool edit,}) async {
+      return PacienteEdit(
+        model,
+        builder,
+        consumer,
+        edit: edit,
+      );
+    },
+  );
 }
