@@ -10,14 +10,14 @@ class PacienteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          ExpansionTile(
-            initiallyExpanded: true,
-            title: Text(paciente.nome),
-            subtitle: const Text('Ver dados do paciente'),
-            children: [
+          Column(
+            children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.person),
                 title: Text(paciente.nome),

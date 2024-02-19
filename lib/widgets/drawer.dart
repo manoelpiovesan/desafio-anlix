@@ -23,7 +23,10 @@ class DrawerWidget extends StatelessWidget {
               child: Text(
                 'Desafio Anlix',
                 style: TextStyle(
-                    fontSize: 24, color: Colors.white, fontFamily: 'MagistralBold'),
+                  fontSize: 24,
+                  color: Colors.white,
+                  fontFamily: 'MagistralBold',
+                ),
               ),
             ),
           ),

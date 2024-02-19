@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:chart_sparkline/chart_sparkline.dart';
 import 'package:desafio_anlix_front_folly_fields/consumers/indice_pulmonar_consumer.dart';
+import 'package:desafio_anlix_front_folly_fields/consumers/paciente_consumer.dart';
 import 'package:desafio_anlix_front_folly_fields/models/indice_pulmonar_model.dart';
+import 'package:desafio_anlix_front_folly_fields/models/paciente_model.dart';
 import 'package:flutter/material.dart';
 
 class IndicePulmonarChart extends StatefulWidget {
@@ -50,6 +54,10 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
         for (int i = 0; i < snapshot.data!.length; i++) {
           indices.add(snapshot.data![i].indice);
         }
+        final int timestamp = int.parse(snapshot.data!.last.data);
+        final DateTime data = DateTime.fromMillisecondsSinceEpoch(
+          timestamp * 1000,
+        );
 
         return Card(
           shape: RoundedRectangleBorder(
@@ -58,7 +66,6 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
           child: Padding(
             padding: const EdgeInsets.all(18),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Sparkline(
                   useCubicSmoothing: true,
@@ -69,7 +76,7 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                   data: indices,
                   lineColor: Colors.blue,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 18),
                 SizedBox(
                   width: 300,
                   child: Row(
@@ -99,12 +106,12 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                   width: 300,
                   child: Table(
                     columnWidths: const <int, TableColumnWidth>{
-                      0: FlexColumnWidth(1),
-                      1: FlexColumnWidth(1),
+                      0: FlexColumnWidth(),
+                      1: FlexColumnWidth(),
                     },
-                    children: [
+                    children: <TableRow>[
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Máximo',
                           ),
@@ -114,7 +121,7 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                         ],
                       ),
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Mínimo:',
                           ),
@@ -124,7 +131,7 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                         ],
                       ),
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Média:',
                           ),
@@ -136,7 +143,7 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                         ],
                       ),
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Última medição:',
                           ),
@@ -145,6 +152,29 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                           ),
                         ],
                       ),
+                      TableRow(
+                        children: <Widget>[
+                          const Text(
+                            'Última atualização',
+                          ),
+                          Text(
+                            '${data.day}/${data.month}/${data.year}',
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+                ElevatedButton(
+                  onPressed: () {
+                    exportCSV(widget.pacienteId);
+                  },
+                  child: const Row(
+                    children: <Widget>[
+                      Icon(Icons.file_download),
+                      SizedBox(width: 10),
+                      Text('Exportar CSV'),
                     ],
                   ),
                 ),
@@ -154,5 +184,23 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
         );
       },
     );
+  }
+
+  Future<void> exportCSV(int id) async {
+    final PacienteConsumer pacienteConsumer = PacienteConsumer();
+    PacienteModel? paciente = PacienteModel()..id = id;
+
+    paciente = await pacienteConsumer.getById(context, paciente);
+
+    String nome = paciente!.nome.replaceAll(' ', '_').toLowerCase();
+
+    final IndicePulmonarConsumer consumer =
+        IndicePulmonarConsumer(pacienteId: id);
+    final String csv = await consumer.getCSV();
+    String pathName = nome.replaceAll(' ', '_').toLowerCase();
+
+    final File file = File('csv/${pathName}_indice_pulmonar.csv');
+
+    await file.writeAsString(csv).then((value) => print('CSV exportado'));
   }
 }

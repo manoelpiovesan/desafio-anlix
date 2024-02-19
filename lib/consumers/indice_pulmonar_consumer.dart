@@ -35,4 +35,30 @@ class IndicePulmonarConsumer {
       return <IndicePulmonar>[];
     }
   }
+
+  ///
+  ///
+  ///
+  Future<String> getCSV() async {
+    final Uri uri = Uri.parse('http://localhost:8080/pacientes/csv/pulmonar/$pacienteId');
+
+
+    try {
+      final AgattpResponse response =
+      await Agattp.authBearer('').get(uri);
+
+      if ((response.statusCode < 200) || (response.statusCode > 299)) {
+        throw Exception(
+          'Backend returned status code ${response.statusCode}',
+        );
+      }
+
+      return response.body;
+    } on Exception catch (e) {
+      if(kDebugMode){
+        print(e);
+      }
+      return '';
+    }
+  }
 }

@@ -29,11 +29,11 @@ class _PacienteDetailsViewState extends State<PacienteDetailsView> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                mainAxisSize: MainAxisSize.max,
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   IndiceCardiacoChart(pacienteId: widget.paciente.id!),
@@ -41,8 +41,9 @@ class _PacienteDetailsViewState extends State<PacienteDetailsView> {
                   IndicePulmonarChart(pacienteId: widget.paciente.id!),
                 ],
               ),
-              const SizedBox(height: 18),
-              PacienteCard(paciente: widget.paciente),
+              Expanded(
+                child: PacienteCard(paciente: widget.paciente),
+              ),
             ],
           ),
         ),

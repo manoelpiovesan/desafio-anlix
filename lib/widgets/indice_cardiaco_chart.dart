@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:chart_sparkline/chart_sparkline.dart';
 import 'package:desafio_anlix_front_folly_fields/consumers/indice_cardiaco_consumer.dart';
+import 'package:desafio_anlix_front_folly_fields/consumers/paciente_consumer.dart';
 import 'package:desafio_anlix_front_folly_fields/models/indice_cardiaco_model.dart';
+import 'package:desafio_anlix_front_folly_fields/models/paciente_model.dart';
 import 'package:flutter/material.dart';
 
 class IndiceCardiacoChart extends StatefulWidget {
@@ -49,6 +53,11 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
           indices.add(snapshot.data![i].indice);
         }
 
+        final int timestamp = int.parse(snapshot.data!.last.data);
+        final DateTime data = DateTime.fromMillisecondsSinceEpoch(
+          timestamp * 1000,
+        );
+
         return Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -57,7 +66,6 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
             padding: const EdgeInsets.all(18),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Sparkline(
                   useCubicSmoothing: true,
@@ -68,7 +76,7 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                   data: indices,
                   lineColor: Colors.red,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 18),
                 SizedBox(
                   width: 300,
                   child: Row(
@@ -77,7 +85,9 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                       const Text(
                         'Índice Cardíaco',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                       indices[indices.length - 1] > indices[indices.length - 2]
                           ? const Icon(
@@ -96,12 +106,12 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                   width: 300,
                   child: Table(
                     columnWidths: const <int, TableColumnWidth>{
-                      0: FlexColumnWidth(1),
-                      1: FlexColumnWidth(1),
+                      0: FlexColumnWidth(),
+                      1: FlexColumnWidth(),
                     },
-                    children: [
+                    children: <TableRow>[
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Máximo',
                           ),
@@ -111,7 +121,7 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                         ],
                       ),
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Mínimo:',
                           ),
@@ -121,7 +131,7 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                         ],
                       ),
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Média:',
                           ),
@@ -133,7 +143,7 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                         ],
                       ),
                       TableRow(
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Última medição:',
                           ),
@@ -142,6 +152,29 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
                           ),
                         ],
                       ),
+                      TableRow(
+                        children: <Widget>[
+                          const Text(
+                            'Última atualização:',
+                          ),
+                          Text(
+                            '${data.day}/${data.month}/${data.year}',
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+                ElevatedButton(
+                  onPressed: () {
+                    exportCSV(widget.pacienteId);
+                  },
+                  child: const Row(
+                    children: <Widget>[
+                      Icon(Icons.file_download),
+                      SizedBox(width: 10),
+                      Text('Exportar CSV'),
                     ],
                   ),
                 ),
@@ -151,5 +184,23 @@ class _IndiceCardiacoChartState extends State<IndiceCardiacoChart> {
         );
       },
     );
+  }
+
+  Future<void> exportCSV(int id) async {
+    final PacienteConsumer pacienteConsumer = PacienteConsumer();
+    PacienteModel? paciente = PacienteModel()..id = id;
+
+    paciente = await pacienteConsumer.getById(context, paciente);
+
+    String nome = paciente!.nome.replaceAll(' ', '_').toLowerCase();
+
+    final IndiceCardiacoConsumer consumer =
+        IndiceCardiacoConsumer(pacienteId: id);
+    final String csv = await consumer.getCSV();
+    String pathName = nome.replaceAll(' ', '_').toLowerCase();
+
+    final File file = File('csv/${pathName}_indice_cardiaco.csv');
+
+    await file.writeAsString(csv).then((value) => print('CSV exportado'));
   }
 }
