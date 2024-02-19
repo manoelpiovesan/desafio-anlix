@@ -1,5 +1,6 @@
 import 'package:agattp/agattp.dart';
 import 'package:desafio_anlix_front_folly_fields/models/indice_cardiaco_model.dart';
+import 'package:flutter/foundation.dart';
 
 class IndiceCardiacoConsumer {
   int pacienteId;
@@ -13,8 +14,9 @@ class IndiceCardiacoConsumer {
   ///
   ///
   Future<List<IndiceCardiaco>> getAll() async {
-    Uri uri = Uri.parse('http://localhost:8080/pacientes/$pacienteId/cardiaco')
-        .replace(queryParameters: <String, String>{'all': 'true'});
+    final Uri uri =
+        Uri.parse('http://localhost:8080/pacientes/$pacienteId/cardiaco')
+            .replace(queryParameters: <String, String>{'all': 'true'});
 
     try {
       final AgattpResponseJson<List<dynamic>> response =
@@ -26,9 +28,11 @@ class IndiceCardiacoConsumer {
         );
       }
 
-      return response.json.map((e) => IndiceCardiaco.fromJson(e)).toList();
+      return response.json.map((dynamic e) => IndiceCardiaco.fromJson(e)).toList();
     } on Exception catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return <IndiceCardiaco>[];
     }
   }

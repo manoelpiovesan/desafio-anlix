@@ -1,4 +1,3 @@
-import 'package:desafio_anlix_front_folly_fields/enums/color_enum.dart';
 import 'package:folly_fields/crud/abstract_model.dart';
 
 ///

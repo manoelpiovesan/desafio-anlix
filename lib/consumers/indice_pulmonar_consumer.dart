@@ -1,5 +1,6 @@
 import 'package:agattp/agattp.dart';
 import 'package:desafio_anlix_front_folly_fields/models/indice_pulmonar_model.dart';
+import 'package:flutter/foundation.dart';
 
 class IndicePulmonarConsumer {
   int pacienteId;
@@ -13,7 +14,7 @@ class IndicePulmonarConsumer {
   ///
   ///
   Future<List<IndicePulmonar>> getAll() async {
-    Uri uri = Uri.parse('http://localhost:8080/pacientes/$pacienteId/pulmonar')
+    final Uri uri = Uri.parse('http://localhost:8080/pacientes/$pacienteId/pulmonar')
         .replace(queryParameters: <String, String>{'all': 'true'});
 
     try {
@@ -26,9 +27,11 @@ class IndicePulmonarConsumer {
         );
       }
 
-      return response.json.map((e) => IndicePulmonar.fromJson(e)).toList();
+      return response.json.map((dynamic e) => IndicePulmonar.fromJson(e)).toList();
     } on Exception catch (e) {
-      print(e);
+      if(kDebugMode){
+        print(e);
+      }
       return <IndicePulmonar>[];
     }
   }

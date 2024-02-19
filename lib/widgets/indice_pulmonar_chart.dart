@@ -1,5 +1,6 @@
 import 'package:chart_sparkline/chart_sparkline.dart';
 import 'package:desafio_anlix_front_folly_fields/consumers/indice_pulmonar_consumer.dart';
+import 'package:desafio_anlix_front_folly_fields/models/indice_pulmonar_model.dart';
 import 'package:flutter/material.dart';
 
 class IndicePulmonarChart extends StatefulWidget {
@@ -28,9 +29,10 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
   ///
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<List<IndicePulmonar>>(
         future: consumer.getAll(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<IndicePulmonar>> snapshot,) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -42,8 +44,8 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
               child: Text('Error: ${snapshot.error}'),
             );
           }
-          List<double> indices = [];
-          for (var i = 0; i < snapshot.data!.length; i++) {
+          final List<double> indices = <double>[];
+          for (int i = 0; i < snapshot.data!.length; i++) {
             indices.add(snapshot.data![i].indice);
           }
 
@@ -52,7 +54,7 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
             padding: const EdgeInsets.all(18),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 Sparkline(
                   useCubicSmoothing: true,
                   cubicSmoothingFactor: 0.2,
@@ -64,16 +66,19 @@ class _IndicePulmonarChartState extends State<IndicePulmonarChart> {
                 ),
                 const SizedBox(height: 10),
                 const Text('Indice Pulmonar',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: TextStyle(fontWeight: FontWeight.bold),),
                 const SizedBox(height: 10),
-                Text('Máximo: ${indices.reduce((a, b) => a > b ? a : b)}'),
-                Text('Mínimo: ${indices.reduce((a, b) => a < b ? a : b)}'),
                 Text(
-                    'Média: ${indices.reduce((a, b) => a + b) / indices.length}'),
+                    'Máximo: ${indices.reduce((double a, double b) => a > b ? a : b)}',),
+                Text('Mínimo: ${indices.reduce(
+                  (double a, double b) => a < b ? a : b,
+                )}'),
+                Text(
+                    'Média: ${indices.reduce((double a, double b) => a + b) / indices.length}',),
                 Text('Última medição: ${indices.last}'),
               ],
             ),
-          ));
-        });
+          ),);
+        },);
   }
 }

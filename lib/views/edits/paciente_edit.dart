@@ -186,7 +186,7 @@ class PacienteEdit extends AbstractEdit<PacienteModel, PacienteBuilder,
           'roxo': Text('Roxo'),
           'laranja': Text('Laranja'),
         },
-      )
+      ),
     ];
   }
 }

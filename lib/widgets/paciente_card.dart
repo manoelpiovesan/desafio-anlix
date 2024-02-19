@@ -27,9 +27,11 @@ class PacienteCard extends StatelessWidget {
             title: Text(paciente.celular),
           ),
           ListTile(
-              leading: const Icon(Icons.home),
-              title: Text(
-                  '${paciente.endereco}, ${paciente.numero}, ${paciente.bairro}, ${paciente.cidade} - ${paciente.estado}, ${paciente.cep}.')),
+            leading: const Icon(Icons.home),
+            title: Text(
+              '${paciente.endereco}, ${paciente.numero}, ${paciente.bairro}, ${paciente.cidade} - ${paciente.estado}, ${paciente.cep}.',
+            ),
+          ),
           ListTile(
             leading: const Icon(Icons.calendar_today),
             title: Text(paciente.dataNasc),

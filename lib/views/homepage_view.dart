@@ -1,4 +1,3 @@
-import 'package:desafio_anlix_front_folly_fields/views/lists/paciente_list.dart';
 import 'package:desafio_anlix_front_folly_fields/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +20,12 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       drawer: const DrawerWidget(),
       appBar: AppBar(
-        title: const Text('Desafio Anlix'),
+        title: const Text(
+          'Desafio Anlix',
+          style: TextStyle(fontFamily: 'MagistralBold'),
+        ),
       ),
-      body: Text('Homepage'),
+      body: const Text('Homepage'),
     );
   }
 }
