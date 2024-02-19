@@ -13,51 +13,58 @@ class PacienteCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          ListTile(
-            leading: const Icon(Icons.person),
+          ExpansionTile(
+            initiallyExpanded: true,
             title: Text(paciente.nome),
-            subtitle: Text(paciente.email),
-          ),
-          ListTile(
-            leading: const Icon(Icons.phone),
-            title: Text(paciente.telefoneFixo),
-          ),
-          ListTile(
-            leading: const Icon(Icons.phone_android),
-            title: Text(paciente.celular),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: Text(
-              '${paciente.endereco}, ${paciente.numero}, ${paciente.bairro}, ${paciente.cidade} - ${paciente.estado}, ${paciente.cep}.',
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.calendar_today),
-            title: Text(paciente.dataNasc),
-          ),
-          ListTile(
-            leading: const Icon(Icons.circle),
-            title: Text(paciente.sexo),
-          ),
-          ListTile(
-            leading: const Icon(Icons.bloodtype),
-            title: Text(paciente.tipoSanguineo),
-          ),
-          ListTile(
-            leading: const Icon(Icons.accessibility),
-            title: Text('${paciente.altura} m'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.balance),
-            title: Text('${paciente.peso} kg'),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.circle,
-              color: PacienteColor.fromString(paciente.cor).color,
-            ),
-            title: Text(paciente.cor.toUpperCase()),
+            subtitle: const Text('Ver dados do paciente'),
+            children: [
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: Text(paciente.nome),
+                subtitle: Text(paciente.email),
+              ),
+              ListTile(
+                leading: const Icon(Icons.phone),
+                title: Text(paciente.telefoneFixo),
+              ),
+              ListTile(
+                leading: const Icon(Icons.phone_android),
+                title: Text(paciente.celular),
+              ),
+              ListTile(
+                leading: const Icon(Icons.home),
+                title: Text(
+                  '${paciente.endereco}, ${paciente.numero}, ${paciente.bairro}, ${paciente.cidade} - ${paciente.estado}, ${paciente.cep}.',
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.calendar_today),
+                title: Text(paciente.dataNasc),
+              ),
+              ListTile(
+                leading: const Icon(Icons.circle),
+                title: Text(paciente.sexo),
+              ),
+              ListTile(
+                leading: const Icon(Icons.bloodtype),
+                title: Text(paciente.tipoSanguineo),
+              ),
+              ListTile(
+                leading: const Icon(Icons.accessibility),
+                title: Text('${paciente.altura} m'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.balance),
+                title: Text('${paciente.peso} kg'),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.circle,
+                  color: PacienteColor.fromString(paciente.cor).color,
+                ),
+                title: Text(paciente.cor.toUpperCase()),
+              ),
+            ],
           ),
         ],
       ),

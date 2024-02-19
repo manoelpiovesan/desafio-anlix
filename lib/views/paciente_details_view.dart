@@ -33,12 +33,15 @@ class _PacienteDetailsViewState extends State<PacienteDetailsView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   IndiceCardiacoChart(pacienteId: widget.paciente.id!),
+                  const SizedBox(width: 18),
                   IndicePulmonarChart(pacienteId: widget.paciente.id!),
                 ],
               ),
+              const SizedBox(height: 18),
               PacienteCard(paciente: widget.paciente),
             ],
           ),
