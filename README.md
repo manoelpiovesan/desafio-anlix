@@ -5,7 +5,7 @@
 ```bash
 $ git clone https://github.com/manoelpiovesan/desafio-anlix.git
 $ cd desafio-anlix
-$ git checkout -b manoel-front
+$ git checkout manoel-front
 ```
 
 ## Start application
