@@ -1,16 +1,20 @@
-# desafio_anlix_front_folly_fields
+# Desafio Anlix Frontend
 
-A new Flutter project.
+## Clone repository
 
-## Getting Started
+```bash
+$ git clone https://github.com/manoelpiovesan/desafio-anlix.git
+$ cd desafio-anlix
+$ git checkout -b manoel-front
+```
 
-This project is a starting point for a Flutter application.
+## Start application
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+$ flutter pub get
+$ flutter run -d windows | linux | macos
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Exported .csv files
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> ~/csv
