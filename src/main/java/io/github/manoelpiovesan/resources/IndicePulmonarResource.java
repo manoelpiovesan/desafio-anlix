@@ -96,7 +96,10 @@ public class IndicePulmonarResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getCSVById(
             @PathParam("id")
-            Long id
+            Long id,
+            @QueryParam("download")
+            @DefaultValue("false")
+            boolean download
     ) {
 
         Paciente paciente = Paciente.findById(id);
@@ -118,7 +121,14 @@ public class IndicePulmonarResource {
                .append(i.indice).append("\n");
         }
 
-        return Response.ok(csv.toString()).build();
+        Response.ResponseBuilder response = Response.ok(csv.toString());
+
+        if (download) {
+            response.header("Content-Disposition",
+                            "attachment; filename=indice_pulmonar.csv");
+        }
+
+        return response.build();
     }
 
     @GET
