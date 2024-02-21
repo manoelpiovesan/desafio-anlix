@@ -22,12 +22,13 @@ $ curl localhost:8080/pacientes/pulmonar/csv
 $ curl localhost:8080/pacientes/cardiaco/csv
 ```
 ```bash
-$ curl localhost:8080/pacientes/pulmonar/csv/{id}
+$ curl localhost:8080/pacientes/pulmonar/csv/{id}?download=true
 ```
 ```bash
-$ curl localhost:8080/pacientes/cardiaco/csv/{id}
+$ curl localhost:8080/pacientes/cardiaco/csv/{id}?download=true
 ```
-
+> O parâmetro `download` é opcional e pode ser `true` ou `false`.
+> Se `true`, o arquivo será baixado. Por padrão, é `false`.
 
 - [x] Consultar o valor mais recente de uma característica de um paciente que
   esteja entre um intervalo de valores a ser especificado na chamada da API;
