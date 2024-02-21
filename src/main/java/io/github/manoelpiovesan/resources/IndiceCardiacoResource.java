@@ -98,7 +98,7 @@ public class IndiceCardiacoResource {
     }
 
     @GET
-    @Path("/csv/cardiaco/{id}")
+    @Path("/{id}/cardiaco/csv")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getCSVById(
             @PathParam("id")
@@ -137,7 +137,7 @@ public class IndiceCardiacoResource {
     }
 
     @GET
-    @Path("/csv/cardiaco")
+    @Path("/cardiaco/csv/")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getCSV() {
 
